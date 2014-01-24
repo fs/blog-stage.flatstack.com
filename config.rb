@@ -6,10 +6,15 @@ set :images_dir, 'assets/images'
 set :fonts_dir, 'assets/fonts'
 set :partials_dir, 'partials'
 
+set :markdown_engine, :redcarpet
+set :markdown, fenced_code_blocks: true, smartypants: true
+
 activate :blog do |blog|
   blog.prefix = ''
   blog.paginate = true
 end
+
+activate :syntax, line_numbers: false
 
 configure :build do
   activate :minify_css
