@@ -1,6 +1,6 @@
 # Source code for static site
 
-![](https://semaphoreapp.com/api/v1/projects/09043b51-d38e-4bb9-ac3e-385ef0aebaeb/120867/shields_badge.png)
+![[Semaphore](https://semaphoreapp.com/fs/blog-flatstack-com)](https://semaphoreapp.com/api/v1/projects/fe841dbb-8871-4168-982e-fa3ee9d23659/130433/shields_badge.png)
 
 Minimalistic Middleman template that uses slim, sass and coffeescript.
 
