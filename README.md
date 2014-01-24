@@ -28,7 +28,7 @@ date: 2012-01-01
 
 ![](https://www.monosnap.com/image/jN4wrsjq5iWlkNnuTVVWnEdBGgQiXz.png)
 
-* White wile post will be deployed to the http://blog-staging.flatstack.com
+* Wait while post will be deployed to the http://blog-staging.flatstack.com
 
 
 ## Installation
