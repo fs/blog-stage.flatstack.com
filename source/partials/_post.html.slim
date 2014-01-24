@@ -1,0 +1,6 @@
+.post
+  h1 = link_to(article.title, article)
+
+  span.post-date = article.date.strftime('%x')
+
+  = article.body

@@ -12,8 +12,10 @@ html
     script src="//html5shim.googlecode.com/svn/trunk/html5.js"
     <![endif]-->
   body
-
-    = yield
+    .container
+      = partial 'header'
+      = yield
+      = partial 'footer'
 
     script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
     == javascript_include_tag "application"

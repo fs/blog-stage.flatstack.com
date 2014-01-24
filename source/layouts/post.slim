@@ -1,0 +1,12 @@
+---
+layout: default
+---
+
+- wrap_layout :layout
+  .post
+
+    h1 = current_page.data.title
+
+    span.post-date = current_page.date.strftime('%x')
+
+    = yield

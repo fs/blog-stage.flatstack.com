@@ -1,0 +1,11 @@
+- if paginate
+  .pagination
+    - if next_page
+      p = link_to('Older', next_page, class: 'older')
+    - else
+      span.next Older
+
+    - if prev_page
+      p = link_to('Newer', prev_page)
+    - else
+      span.previous Newer
