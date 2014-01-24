@@ -4,6 +4,7 @@ source 'https://rails-assets.org'
 ruby '2.1.0'
 
 gem 'middleman'
+gem 'middleman-blog'
 gem 'middleman-deploy'
 gem 'middleman-google-analytics'
 

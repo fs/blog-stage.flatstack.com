@@ -1,8 +1,15 @@
+Time.zone = 'Moscow'
+
 set :js_dir, 'assets/javascripts'
 set :css_dir, 'assets/stylesheets'
 set :images_dir, 'assets/images'
 set :fonts_dir, 'assets/fonts'
 set :partials_dir, 'partials'
+
+activate :blog do |blog|
+  blog.prefix = ''
+  blog.paginate = true
+end
 
 configure :build do
   activate :minify_css
