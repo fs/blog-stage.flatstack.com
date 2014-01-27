@@ -5,7 +5,7 @@
 
 Source code for http://blog-stage.flatstack.com
 
-## How to create new post
+## Creating posts
 
 * [Create new](https://github.com/fs/blog.flatstack.com/new/master/source?filename=yyyy-mm-dd-your-title.html.markdown)
   file inside [`source`](source) direcotry
@@ -31,7 +31,7 @@ date: 2012-01-01
 * Wait while post will be deployed to the http://blog-staging.flatstack.com
 
 
-## Installation
+### Development
 
 ```bash
 # Clone the template
@@ -43,21 +43,21 @@ cd sitename
 bin/bootstrap
 ```
 
-## Development workflow
+### Workflow
 
 1. Start server with `bin/server`
 2. Make changes in the `source` folder
 3. Checkout results in the browser on `http://localhost:4567`
 
-## Manual deploy to Github pages
+### Manual deploy to Github pages
 
 Run `bin/deploy`
 
 Make sure you have specified correct `source/CNAME`
 
-## Semaphore integration
+### Semaphore integration
 
-### Test build
+#### Test build
 
 You can use [Semaphore](https://semaphoreapp.com) to make sure you source code
 will be build successfully.
@@ -69,7 +69,7 @@ bin/bootstrap
 bin/build
 ```
 
-### Deploy automatically to Github pages
+#### Deploy automatically to Github pages
 
 * Deploy type: `Capistrano`
 * Deployment Strategy: `Manual`
