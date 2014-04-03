@@ -1,0 +1,94 @@
+<!DOCTYPE html><html><head><meta charset="utf-8" /><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" /><title>Model attributes internationalization</title><meta content="width=device-width, initial-scale=1" name="viewport" /><link href="../../../assets/stylesheets/application-b74bbef3.css" media="screen" rel="stylesheet" type="text/css" /><!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]--></head><body><div class="container"><header class="masthead"><p><strong>The Flatstack Blog</strong><br>Latest news...</br></p></header><div class="post"><h1>Model attributes internationalization</h1><span class="post-date">01/24/14</span><h1>Goal</h1>
+
+<p>One of our current Rails-based projects needed to localize data referring to models,
+e.g. category name and description. Additionally, it had to be editable from the admin panel.</p>
+
+<h2>Finding a solution</h2>
+
+<p>We had no experience with this and so we brainstormed a bit.
+After considering several options, we decided to create a table for
+localized attributes for each model in the database. Not to reinvent
+the wheel we searched for some gems and found simple &lsquo;globalize3&rsquo;
+that is able to do just what was needed.</p>
+
+<h2>Implementation</h2>
+
+<p>Add the following to Gemfile:</p>
+<pre class="highlight ruby"><span class="n">gem</span> <span class="s1">'globalize3'</span>
+</pre>
+<p>Then take the model we need to localize. It&rsquo;s worth noting you DON&rsquo;T need to
+create attributes to be localized for the model.</p>
+<pre class="highlight shell"><span class="gp">$ </span>rails g model Category static_attr: string
+</pre>
+<p>Then create a migration for the localization table:</p>
+<pre class="highlight shell"><span class="gp">$ </span>rails g migration AddTranslationToCategories
+  invoke  active_record
+    create db/migrate/20130508112221_add_translation_to_categories.rb
+</pre>
+<p>which will create the follow migration for us:</p>
+<pre class="highlight ruby"><span class="k">class</span> <span class="nc">AddTranslationToCategories</span> <span class="o">&gt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Migration</span>
+  <span class="k">def</span> <span class="nf">change</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre>
+<p>It needs to be tweaked a bit so that it fully supports rollback of the localization table.
+Since it&rsquo;s title and description we need to localize, the migration changes as follows:</p>
+
+<p>Now we need to specify that some of the model attributes are localized:</p>
+<pre class="highlight ruby"><span class="k">class</span> <span class="nc">Category</span> <span class="o">&gt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+  <span class="n">translates</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:description</span>
+<span class="k">end</span>
+</pre>
+<p>We will have two new tables in the database after the migration:
+* &lsquo;categories&rsquo; to store the data on category:</p>
+<pre class="highlight shell">irb<span class="o">(</span>main<span class="o">)</span>:001:0&amp;gt;Category
+    <span class="o">=</span>&amp;gt; Category<span class="o">(</span>id: integer, static_attr: string, created_at:
+    datetime, updated_at: datetime<span class="o">)</span>
+</pre>
+<ul>
+<li>category_translations - to store translations.</li>
+</ul>
+
+<p>Now <code>Category</code> has new <code>get</code> and <code>set</code> methods that were mentioned above - title and category.
+&lsquo;globalize3&rsquo; uses a locale for i18n to search and record.
+If current locale doesn&rsquo;t have an entry in translation table,
+it will return a translation for the default locale</p>
+<pre class="highlight shell"><span class="gp">irb(main):001:0&gt; </span>I18n.default_locale
+<span class="gp">=&gt; </span>:en
+<span class="gp">irb(main):002:0&gt; </span>category <span class="o">=</span> Category.create<span class="o">(</span>title: <span class="s1">':en title'</span>, description: <span class="s1">':en description'</span><span class="o">)</span>
+<span class="gp">=&gt; </span><span class="c">#&gt;Category id: 1, created_at: "2013-05-08 11:41:58", updated_at: "2013-05-08 11:41:58"&gt;</span>
+<span class="gp">irb(main):003:0&gt; </span>category.description
+<span class="gp">=&gt; </span><span class="s2">":en description"</span>
+<span class="gp">irb(main):004:0&gt; </span>I18n.locale <span class="o">=</span> :fr
+<span class="gp">=&gt; </span>:fr
+<span class="gp">irb(main):005:0&gt; </span>category.description <span class="o">=</span> <span class="s1">':fr description'</span>
+<span class="gp">=&gt; </span><span class="s2">":fr description"</span>
+<span class="gp">irb(main):006:0&gt; </span>category.save
+<span class="gp">=&gt; </span><span class="nb">true
+</span><span class="gp">irb(main):007:0&gt; </span>category.description
+<span class="gp">=&gt; </span><span class="s2">":fr description"</span>
+<span class="gp">irb(main):008:0&gt; </span>category.title
+<span class="gp">=&gt; </span><span class="s2">":en title"</span>
+</pre>
+<h2>Conclusion</h2>
+
+<p>&lsquo;globalize3&rsquo; provides a simple and convenient means to localize model attributes,
+which allows to set up a localization for the app pretty quickly and edit localized
+data via the admin panel.</p>
+
+<h3>Find more here:</h3>
+
+<ul>
+<li><a href="https://github.com/svenfuchs/globalize3">globalize3 repository</a></li>
+<li><a href="http://railscasts.com/episodes/338-globalize3">globalize3 RailsCasts</a></li>
+</ul>
+</div><footer class="colophon"><ul class="quick-links"><li><a href="http://www.flatstack.com">Main site</a></li><li><a href="https://github.com/fs">Github</a></li></ul><p>&copy; 2014. All rights reserved.</p></footer></div><script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script><script src="../../../assets/javascripts/application-f3da50a8.js" type="text/javascript"></script><script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(["_setAccount", "UA-XXXXXXX-X"]);
+  _gaq.push(["_trackPageview"]);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script></body></html>
